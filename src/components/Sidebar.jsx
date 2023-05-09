@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { SearchContext } from '../context/SearchContextProvider'
 import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 const Sidebar = () => {
   const { setSearchType } = useContext(SearchContext)
 
@@ -11,14 +12,19 @@ const Sidebar = () => {
         <FilterItem onClick={() => setSearchType('popularity')}>
           Popularity
         </FilterItem>
-
+        <FilterItem onClick={() => setSearchType('popularity')}>
+          <Link to="/">Home</Link>
+        </FilterItem>
+        <FilterItem onClick={() => setSearchType('popularity')}>
+          <Link to="/discover">Discover</Link>
+        </FilterItem>
         <FilterItem onClick={() => setSearchType('votes')}>Votes</FilterItem>
       </FilterList>
       <FilterTitle>Filter by</FilterTitle>
       <FilterList>
         <FilterItem>Date</FilterItem>
         <FilterItem onClick={() => setSearchType('favourites')}>
-          My List
+          <Link to="/userList"> My List</Link>
         </FilterItem>
       </FilterList>
     </Container>

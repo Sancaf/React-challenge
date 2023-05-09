@@ -13,15 +13,19 @@ function ListOfMovies() {
   const IMAGE_PATH = 'https://image.tmdb.org/t/p/w500'
   const API_URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}`
 
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || []
-  console.log(searchType)
+  const favorites = Object.values(
+    JSON.parse(localStorage.getItem('favorites') || '{}')
+  )
+  const test = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=2`
   const fetchData = async () => {
     const config = {
       popularity: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
       votes: `https://api.themoviedb.org/3/movie/top_votes?api_key=${API_KEY}`,
       textQuery: API_URL,
     }
-    const res = await fetch(config[searchType])
+    const path = config[searchType]
+    if (!path) return
+    const res = await fetch(path)
     return res.json()
   }
 
@@ -35,11 +39,13 @@ function ListOfMovies() {
     setSelectedMovie(movie)
   }
 
+  const movies = searchType === 'favourites' ? favorites : data?.results || []
+
   return (
     <Deck>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error fetching data</div>}
-      {data?.results?.map((movie) => (
+      {movies.map((movie) => (
         <Card key={movie.id} onClick={() => handleCardClick(movie)}>
           <Poster src={IMAGE_PATH + movie.poster_path} alt={movie.title} />
           <CardContent>

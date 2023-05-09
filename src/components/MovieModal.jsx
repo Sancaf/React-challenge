@@ -7,9 +7,10 @@ function MovieModal({ selectedMovie, onClose }) {
   const handleAddToFavorites = () => {
     alert(`${selectedMovie.title} agregada a favoritos!`)
 
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || []
-    const newFavorites = [...favorites, selectedMovie]
-    localStorage.setItem('favorites', JSON.stringify(newFavorites))
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || {}
+    favorites[selectedMovie.id] = selectedMovie
+
+    localStorage.setItem('favorites', JSON.stringify(favorites))
   }
 
   return (
