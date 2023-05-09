@@ -12,13 +12,14 @@ const Sidebar = () => {
           Popularity
         </FilterItem>
 
-        <FilterItem>Votes</FilterItem>
+        <FilterItem onClick={() => setSearchType('votes')}>Votes</FilterItem>
       </FilterList>
       <FilterTitle>Filter by</FilterTitle>
       <FilterList>
         <FilterItem>Date</FilterItem>
-        <FilterItem>Keywords</FilterItem>
-        <FilterItem>My List</FilterItem>
+        <FilterItem onClick={() => setSearchType('favourites')}>
+          My List
+        </FilterItem>
       </FilterList>
     </Container>
   )

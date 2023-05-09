@@ -11,10 +11,10 @@ function ListOfMovies() {
   const API_KEY = 'ba282fc7777a85594b4d09bffedbb258'
 
   const IMAGE_PATH = 'https://image.tmdb.org/t/p/w500'
-  const API_URL = `https://api.themoviedb.org/3/search/movie?api_key=ba282fc7777a85594b4d09bffedbb258&query=${searchQuery}`
-  /*  const popularity = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}` */
-  /*   const votes = `https://api.themoviedb.org/3/movie/top_votes?api_key=${API_KEY}` */
+  const API_URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}`
 
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || []
+  console.log(searchType)
   const fetchData = async () => {
     const config = {
       popularity: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,

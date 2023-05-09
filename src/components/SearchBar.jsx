@@ -10,7 +10,6 @@ function SearchBar() {
   const handleSearch = (value) => {
     setSearchTerm(value)
     setSearchQuery(searchTerm)
-
     setSearchType('textQuery')
   }
   return (
