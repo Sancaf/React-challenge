@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { useContext } from 'react'
 import { SearchContext } from '../context/SearchContextProvider'
@@ -22,7 +21,6 @@ function SearchBar() {
         type="text"
         placeholder="Search..."
         value={searchQuery}
-        onBlur={() => setSearchQuery('')}
         onChange={(e) => handleSearch(e.target.value)}
       />
     </SearchBarContainer>

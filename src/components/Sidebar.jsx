@@ -3,19 +3,23 @@ import { SearchContext } from '../context/SearchContextProvider'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 const Sidebar = () => {
-  const { setSearchType } = useContext(SearchContext)
+  const { setSearchType, setSearchQuery } = useContext(SearchContext)
 
+  const handleClick = (filter) => {
+    setSearchType(filter)
+    setSearchQuery('')
+  }
   return (
     <Container>
       <FilterTitle>All Movies</FilterTitle>
       <FilterList>
-        <FilterItem onClick={() => setSearchType('discover')}>
+        <FilterItem onClick={() => handleClick('discover')}>
           <Link to="/">Discover</Link>
         </FilterItem>
       </FilterList>
       <FilterTitle>Movie selection</FilterTitle>
       <FilterList>
-        <FilterItem onClick={() => setSearchType('favourites')}>
+        <FilterItem onClick={() => handleClick('favourites')}>
           <Link to="/Movie-selections"> My List</Link>
         </FilterItem>
       </FilterList>

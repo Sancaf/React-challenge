@@ -4,10 +4,15 @@ import { useContext } from 'react'
 import { SearchContext } from '../context/SearchContextProvider'
 
 const Header = () => {
-  const { setSearchType } = useContext(SearchContext)
+  const { setSearchType, setSearchQuery } = useContext(SearchContext)
+
+  const handleClick = (filter) => {
+    setSearchType(filter)
+    setSearchQuery('')
+  }
   return (
     <Container>
-      <Logo onClick={() => setSearchType('discover')}>
+      <Logo onClick={() => handleClick('discover')}>
         <Link to="/">DiscoverMovies</Link>
       </Logo>
     </Container>

@@ -3,6 +3,7 @@ import { useState, useContext } from 'react'
 import styled from 'styled-components'
 import React from 'react'
 import MovieModal from './MovieModal'
+import { useLocation } from 'react-router-dom'
 import { SearchContext } from '../context/SearchContextProvider'
 import { useInView } from 'react-intersection-observer'
 
@@ -34,6 +35,7 @@ function ListOfMovies() {
 
         const res = await fetch(path)
         const data = await res.json()
+        console.log(data)
         return {
           nextPage: data.page + 1,
           totalPages: data.total_pages,
@@ -74,6 +76,8 @@ function ListOfMovies() {
       fetchNextPage()
     }
   }, [inView, hasNextPage, fetchNextPage])
+
+  const { pathname } = useLocation()
   return (
     <Deck>
       {isLoading && <div>Loading...</div>}
@@ -83,6 +87,9 @@ function ListOfMovies() {
           <Poster src={IMAGE_PATH + movie.poster_path} alt={movie.title} />
           <CardContent>
             <Title>{movie.title}</Title>
+            {pathname === '/Movie-selections' && (
+              <Overview>{movie.overview.substring(0, 200)}...</Overview>
+            )}
           </CardContent>
         </Card>
       ))}
@@ -127,6 +134,8 @@ const CardContent = styled.div`
   padding: 0.5em;
   height: 15%;
   display: flex;
+  gap: 0.5em;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `
@@ -136,6 +145,16 @@ const Title = styled.h2`
   font-weight: bold;
   margin: 0;
   margin-bottom: 4px;
+`
+
+const Overview = styled.p`
+  font-size: 14px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Mostrar solo 3 líneas */
+  -webkit-box-orient: vertical;
 `
 
 export default ListOfMovies

@@ -3,11 +3,17 @@ import { SearchContext } from '../context/SearchContextProvider'
 import { useContext } from 'react'
 
 function Filters() {
-  const { setSearchType, setStartDate, setEndDate, searchType } =
-    useContext(SearchContext)
+  const {
+    setSearchType,
+    setStartDate,
+    setEndDate,
+    searchType,
+    setSearchQuery,
+  } = useContext(SearchContext)
 
   const handleFilterChange = (filter) => {
     searchType === filter ? setSearchType('discover') : setSearchType(filter)
+    setSearchQuery('')
   }
 
   return (
