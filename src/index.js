@@ -5,7 +5,6 @@ import reportWebVitals from './reportWebVitals'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import UserList from './pages/UserList'
-import Discover from './pages/Discover'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import SearchContextProvider from './context/SearchContextProvider'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -17,10 +16,9 @@ export default function App() {
       <SearchContextProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="*" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="discover" element={<Discover />} />
-              <Route path="userList" element={<UserList />} />
+              <Route path="Movie-selections" element={<UserList />} />
             </Route>
           </Routes>
         </BrowserRouter>

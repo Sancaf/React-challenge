@@ -7,24 +7,16 @@ const Sidebar = () => {
 
   return (
     <Container>
-      <FilterTitle>Sort Results By</FilterTitle>
+      <FilterTitle>All Movies</FilterTitle>
       <FilterList>
-        <FilterItem onClick={() => setSearchType('popularity')}>
-          Popularity
+        <FilterItem onClick={() => setSearchType('discover')}>
+          <Link to="/">Discover</Link>
         </FilterItem>
-        <FilterItem onClick={() => setSearchType('popularity')}>
-          <Link to="/">Home</Link>
-        </FilterItem>
-        <FilterItem onClick={() => setSearchType('popularity')}>
-          <Link to="/discover">Discover</Link>
-        </FilterItem>
-        <FilterItem onClick={() => setSearchType('votes')}>Votes</FilterItem>
       </FilterList>
-      <FilterTitle>Filter by</FilterTitle>
+      <FilterTitle>Movie selection</FilterTitle>
       <FilterList>
-        <FilterItem>Date</FilterItem>
         <FilterItem onClick={() => setSearchType('favourites')}>
-          <Link to="/userList"> My List</Link>
+          <Link to="/Movie-selections"> My List</Link>
         </FilterItem>
       </FilterList>
     </Container>

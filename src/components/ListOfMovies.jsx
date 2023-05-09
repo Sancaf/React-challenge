@@ -1,37 +1,58 @@
-import { useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { useState, useContext } from 'react'
 import styled from 'styled-components'
 import React from 'react'
 import MovieModal from './MovieModal'
 import { SearchContext } from '../context/SearchContextProvider'
+import { useInView } from 'react-intersection-observer'
 
 function ListOfMovies() {
-  const { searchQuery, searchType } = useContext(SearchContext)
+  const { searchQuery, searchType, startDate, endDate } =
+    useContext(SearchContext)
 
+  const API_URL = `https://api.themoviedb.org/3/`
   const API_KEY = 'ba282fc7777a85594b4d09bffedbb258'
-
   const IMAGE_PATH = 'https://image.tmdb.org/t/p/w500'
-  const API_URL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}`
 
   const favorites = Object.values(
     JSON.parse(localStorage.getItem('favorites') || '{}')
   )
-  const test = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=2`
-  const fetchData = async () => {
-    const config = {
-      popularity: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
-      votes: `https://api.themoviedb.org/3/movie/top_votes?api_key=${API_KEY}`,
-      textQuery: API_URL,
-    }
-    const path = config[searchType]
-    if (!path) return
-    const res = await fetch(path)
-    return res.json()
-  }
 
-  const { isLoading, error, data } = useQuery('movies', fetchData, {
-    refetchInterval: 1000,
-  })
+  const { data, isLoading, error, fetchNextPage, hasNextPage } =
+    useInfiniteQuery(
+      ['movies', searchType, startDate, endDate, searchQuery],
+      async ({ pageParam = 1 }) => {
+        const config = {
+          discover: `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=${pageParam}`,
+          popularity: `${API_URL}discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&language=en-US&page=${pageParam}`,
+          votes: `${API_URL}discover/movie?api_key=${API_KEY}&sort_by=vote_average.desc&language=en-US&page=${pageParam}`,
+          date: `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&sort_by=release_date.desc&page=${pageParam}&release_date.gte=${startDate}&release_date.lte=${endDate}`,
+          textQuery: `${API_URL}search/movie?api_key=${API_KEY}&query=${searchQuery}&page=${pageParam}`,
+        }
+        const path = config[searchType]
+        if (!path) return
+
+        const res = await fetch(path)
+        const data = await res.json()
+        return {
+          nextPage: data.page + 1,
+          totalPages: data.total_pages,
+          results: data.results,
+        }
+      },
+      {
+        getNextPageParam: (lastPage) => {
+          if (
+            !lastPage ||
+            !lastPage.nextPage ||
+            lastPage.nextPage > lastPage.totalPages
+          ) {
+            return undefined
+          }
+          return lastPage.nextPage
+        },
+      }
+    )
 
   const [selectedMovie, setSelectedMovie] = useState(null)
 
@@ -39,8 +60,20 @@ function ListOfMovies() {
     setSelectedMovie(movie)
   }
 
-  const movies = searchType === 'favourites' ? favorites : data?.results || []
+  const movies =
+    searchType === 'favourites'
+      ? favorites
+      : data?.pages?.flatMap((page) => page.results) || []
 
+  const { ref, inView } = useInView({
+    threshold: 0,
+  })
+
+  React.useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, fetchNextPage])
   return (
     <Deck>
       {isLoading && <div>Loading...</div>}
@@ -53,6 +86,7 @@ function ListOfMovies() {
           </CardContent>
         </Card>
       ))}
+      <div ref={ref} />
       {selectedMovie && (
         <MovieModal
           selectedMovie={selectedMovie}

@@ -1,9 +1,15 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { SearchContext } from '../context/SearchContextProvider'
 
 const Header = () => {
+  const { setSearchType } = useContext(SearchContext)
   return (
     <Container>
-      <Logo>DiscoverMovies</Logo>
+      <Logo onClick={() => setSearchType('discover')}>
+        <Link to="/">DiscoverMovies</Link>
+      </Logo>
     </Container>
   )
 }
