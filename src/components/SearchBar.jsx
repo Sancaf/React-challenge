@@ -1,23 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { SearchContext } from '../context/SearchContextProvider'
 
 function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('')
-  const { setSearchQuery } = useContext(SearchContext)
+  const { setSearchQuery, setSearchType } = useContext(SearchContext)
 
-  useEffect(() => {
+  const handleSearch = (value) => {
+    setSearchTerm(value)
     setSearchQuery(searchTerm)
-  }, [searchTerm, setSearchQuery])
 
+    setSearchType('textQuery')
+  }
   return (
     <SearchBarContainer>
       <SearchBarInput
         type="text"
         placeholder="Search..."
         value={searchTerm}
-        onChange={(e) => e.target.value && setSearchTerm(e.target.value)}
+        onChange={(e) => handleSearch(e.target.value)}
       />
       <SearchBarButton>Search</SearchBarButton>
     </SearchBarContainer>

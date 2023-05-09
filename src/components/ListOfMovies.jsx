@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import styled from 'styled-components'
 import React from 'react'
 import MovieModal from './MovieModal'
 import { SearchContext } from '../context/SearchContextProvider'
 
 function ListOfMovies() {
-  const { searchQuery, searchType, setSearchType } = useContext(SearchContext)
+  const { searchQuery, searchType } = useContext(SearchContext)
 
   const API_KEY = 'ba282fc7777a85594b4d09bffedbb258'
 
@@ -15,12 +15,7 @@ function ListOfMovies() {
   /*  const popularity = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}` */
   /*   const votes = `https://api.themoviedb.org/3/movie/top_votes?api_key=${API_KEY}` */
 
-  useEffect(() => {
-    setSearchType('textQuery')
-  }, [searchQuery, setSearchType])
-
   const fetchData = async () => {
-    console.log('searchType', searchType)
     const config = {
       popularity: `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`,
       votes: `https://api.themoviedb.org/3/movie/top_votes?api_key=${API_KEY}`,

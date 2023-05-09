@@ -4,7 +4,6 @@ export const SearchContext = createContext()
 
 const SearchContextProvider = (props) => {
   const [searchQuery, setSearchQuery] = useState('')
-
   const [searchType, setSearchType] = useState('popularity')
 
   return (
